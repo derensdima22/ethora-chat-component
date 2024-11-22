@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatRoom from './ChatRoom';
 import { setActiveModal, setConfig } from '../../roomStore/chatSettingsSlice';
@@ -25,6 +25,7 @@ import { refresh } from '../../networking/apiClient';
 import RoomList from './RoomList';
 import { StyledLoaderWrapper } from '../styled/StyledComponents';
 import Modal from '../Modals/Modal/Modal';
+import ThreadWrapper from '../Thread/ThreadWrapper';
 
 interface ChatWrapperProps {
   token?: string;
@@ -55,6 +56,15 @@ const ChatWrapper: FC<ChatWrapperProps> = ({
   const { rooms, activeRoomJID } = useSelector(
     (state: RootState) => state.rooms
   );
+
+  const activeMessage = useMemo(() => {
+    if (activeRoomJID) {
+      return rooms[activeRoomJID].messages.find((message) => message.activeMessage);
+    }
+  }, [rooms, activeRoomJID]);
+
+  console.log("rooms!!!", rooms[activeRoomJID]);
+  console.log("activeMessage!!!", activeMessage);
 
   const handleChangeChat = (chat: IRoom) => {
     if (activeRoomJID !== chat.jid) {
@@ -179,6 +189,7 @@ const ChatWrapper: FC<ChatWrapperProps> = ({
                 dispatch(setActiveModal(value))
               }
             />
+            {activeMessage?.activeMessage && <ThreadWrapper activeMessage={activeMessage}/>}
           </ChatWrapperBox>
         ) : (
           <StyledLoaderWrapper>

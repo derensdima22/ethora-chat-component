@@ -26,6 +26,7 @@ export interface IMessage {
   location?: string;
   pending?: boolean;
   timestamp?: number;
+  activeMessage?: boolean;
 }
 
 export interface IRoom {

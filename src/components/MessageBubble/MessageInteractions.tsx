@@ -13,6 +13,7 @@ import {
 } from '../../helpers/constants/MESSAGE_INTERACTIONS';
 import { IMessage } from '../../types/types';
 import { useXmppClient } from '../../context/xmppProvider';
+import { setActiveMessage } from '../../roomStore/roomsSlice';
 
 interface MessageInteractionsProps {
   message: IMessage;
@@ -47,6 +48,14 @@ const MessageInteractions: React.FC<MessageInteractionsProps> = ({
     navigator.clipboard.writeText(text);
   };
 
+  const handleReplyMessage = () => {
+    console.log("message", message);
+    console.log("contextMenu", contextMenu);
+    console.log("setContextMenu", setContextMenu);
+    console.log(MESSAGE_INTERACTIONS.REPLY);
+    dispatch(setActiveMessage({ id: message.id, chatJID: message.roomJID }));
+  }
+
   if (config?.disableInteractions || !contextMenu.visible) return null;
 
   return (
@@ -65,7 +74,7 @@ const MessageInteractions: React.FC<MessageInteractionsProps> = ({
           <MESSAGE_INTERACTIONS_ICONS.SEND_ITEM />{' '}
         </MenuItem>
         <Delimeter />
-        <MenuItem onClick={() => console.log(MESSAGE_INTERACTIONS.REPLY)}>
+        <MenuItem onClick={handleReplyMessage}>
           {MESSAGE_INTERACTIONS.REPLY}
           <MESSAGE_INTERACTIONS_ICONS.REPLY />{' '}
         </MenuItem>

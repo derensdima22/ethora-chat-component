@@ -154,6 +154,24 @@ export const roomsStore = createSlice({
       state.activeRoomJID = null;
       state.isLoading = false;
     },
+    setActiveMessage: (state, action: PayloadAction<{ id: string, chatJID: string }>) => {
+      const { id, chatJID } = action.payload;
+
+      state.rooms[chatJID].messages.map((message) => {
+        if(message.id === id) {
+          message.activeMessage = true;
+        } else {
+          message.activeMessage = false;
+        }
+      });
+    },
+    setCloseActiveMessage: (state, action: PayloadAction<{ chatJID: string }>) => {
+      const { chatJID } = action.payload;
+
+      state.rooms[chatJID].messages.map((message) => {
+          message.activeMessage = false;
+      });
+    },
   },
 });
 
@@ -179,6 +197,8 @@ export const {
   setCurrentRoom,
   setRoomRole,
   setLogoutState,
+  setActiveMessage,
+  setCloseActiveMessage,
   deleteRoom,
   updateRoom,
 } = roomsStore.actions;
