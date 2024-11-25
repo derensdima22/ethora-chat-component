@@ -25,7 +25,7 @@ const ThreadWrapper: FC<ThreadWrapperProps> = ({
 }) => {
   const { client } = useXmppClient();
   const dispatch = useDispatch();
-  const { config } =
+  const { config, loading } =
   useSelector((state: RootState) => ({
     loading:
       state.rooms.rooms[state.rooms.activeRoomJID]?.isLoading || false,
@@ -131,6 +131,22 @@ const ThreadWrapper: FC<ThreadWrapperProps> = ({
     [client, activeMessage.roomJID]
   );
 
+  const sendStartComposing = useCallback(() => {
+    client.sendTypingRequestStanza(
+      activeMessage.roomJID,
+      `${user.firstName} ${user.lastName}`,
+      true
+    );
+  }, []);
+
+  const sendEndComposing = useCallback(() => {
+    client.sendTypingRequestStanza(
+      activeMessage.roomJID,
+      `${user.firstName} ${user.lastName}`,
+      false
+    );
+  }, []);
+
   const closeThread = () => {
     dispatch(setCloseActiveMessage({ chatJID: activeMessage.roomJID}));
   };
@@ -144,7 +160,9 @@ const ThreadWrapper: FC<ThreadWrapperProps> = ({
       }}>
       <div>
         <ModalHeaderComponent headerTitle="Thread" handleCloseModal={closeThread}/>
-        <Message message={activeMessage} isUser={isUser} />
+        <div style={{ padding: "0 16px"}}>
+          <Message message={activeMessage} isUser={isUser} />
+        </div>
       </div>
       <MessageList
         loadMoreMessages={loadMoreMessages}
@@ -157,9 +175,12 @@ const ThreadWrapper: FC<ThreadWrapperProps> = ({
         isReply
       />
       <SendInput
-        isLoading={false}
         sendMedia={sendMedia}
         sendMessage={sendMessage}
+        config={config}
+        onFocus={sendStartComposing}
+        onBlur={sendEndComposing}
+        isLoading={loading}
       />
     </ChatContainer>
   );
