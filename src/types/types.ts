@@ -27,6 +27,12 @@ export interface IMessage {
   pending?: boolean;
   timestamp?: number;
   activeMessage?: boolean;
+  isReply?: boolean;
+  mainMessage?: string;
+  reply?: IReply[];
+}
+
+export interface IReply extends IMessage {
 }
 
 export interface IRoom {

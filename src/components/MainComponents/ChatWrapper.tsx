@@ -63,9 +63,6 @@ const ChatWrapper: FC<ChatWrapperProps> = ({
     }
   }, [rooms, activeRoomJID]);
 
-  console.log("rooms!!!", rooms[activeRoomJID]);
-  console.log("activeMessage!!!", activeMessage);
-
   const handleChangeChat = (chat: IRoom) => {
     if (activeRoomJID !== chat.jid) {
       dispatch(setCurrentRoom({ roomJID: chat.jid }));
@@ -180,16 +177,22 @@ const ChatWrapper: FC<ChatWrapperProps> = ({
                 onRoomClick={handleChangeChat}
               />
             )}
-            <ChatRoom
-              CustomMessageComponent={CustomMessageComponent || Message}
-            />
+
             <Modal
               modal={activeModal}
               setOpenModal={(value?: ModalType) =>
                 dispatch(setActiveModal(value))
               }
             />
-            {activeMessage?.activeMessage && <ThreadWrapper activeMessage={activeMessage}/>}
+            {activeMessage?.activeMessage ?
+              <ThreadWrapper
+                activeMessage={activeMessage}
+                user={user}
+                customMessageComponent={CustomMessageComponent || Message}
+              />
+              : <ChatRoom CustomMessageComponent={CustomMessageComponent || Message}
+            />
+            }
           </ChatWrapperBox>
         ) : (
           <StyledLoaderWrapper>

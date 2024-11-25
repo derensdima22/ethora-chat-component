@@ -19,12 +19,14 @@ interface MessageInteractionsProps {
   message: IMessage;
   contextMenu: { visible: boolean; x: number; y: number };
   setContextMenu: ({ visible, x, y }) => void;
+  handleReplyMessage: () => void;
 }
 
 const MessageInteractions: React.FC<MessageInteractionsProps> = ({
   message,
   contextMenu,
   setContextMenu,
+  handleReplyMessage: replyMessage,
 }) => {
   const { client } = useXmppClient();
   const dispatch = useDispatch();
@@ -49,11 +51,11 @@ const MessageInteractions: React.FC<MessageInteractionsProps> = ({
   };
 
   const handleReplyMessage = () => {
-    console.log("message", message);
-    console.log("contextMenu", contextMenu);
-    console.log("setContextMenu", setContextMenu);
-    console.log(MESSAGE_INTERACTIONS.REPLY);
-    dispatch(setActiveMessage({ id: message.id, chatJID: message.roomJID }));
+    // console.log("message", message);
+    // console.log("contextMenu", contextMenu);
+    // console.log("setContextMenu", setContextMenu);
+    // console.log(MESSAGE_INTERACTIONS.REPLY);
+    replyMessage();
   }
 
   if (config?.disableInteractions || !contextMenu.visible) return null;

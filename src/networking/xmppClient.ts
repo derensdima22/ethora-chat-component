@@ -27,6 +27,7 @@ import { setRoomImage } from './xmpp/setRoomImage.xmpp';
 import { getRoomMembers } from './xmpp/getRoomMembers.xmpp';
 import { getRoomInfo } from './xmpp/getRoomInfo.xmpp';
 import { leaveTheRoom } from './xmpp/leaveTheRoom.xmpp';
+import { sendThreadMessage } from './xmpp/sendThreadMessage.xmpp';
 
 export class XmppClient {
   client!: Client;
@@ -270,7 +271,9 @@ export class XmppClient {
     photo: string,
     walletAddress: string,
     userMessage: string,
-    notDisplayedValue?: string
+    notDisplayedValue?: string,
+    isReply?: boolean,
+    mainMessage?: string,
   ) => {
     sendTextMessage(
       this.client,
@@ -281,6 +284,8 @@ export class XmppClient {
       walletAddress,
       userMessage,
       notDisplayedValue,
+      isReply,
+      mainMessage,
       this.devServer || 'xmpp.ethoradev.com:5443'
     );
   };
@@ -309,6 +314,10 @@ export class XmppClient {
 
   sendMediaMessageStanza(roomJID: string, data: any) {
     sendMediaMessage(this.client, roomJID, data);
+  }
+
+  sendTreadMessageStanza(roomJID: string, messageText: string, data: any) {
+    sendThreadMessage(this.client, roomJID, messageText, data);
   }
 }
 

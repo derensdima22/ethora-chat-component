@@ -157,6 +157,8 @@ export const roomsStore = createSlice({
     setActiveMessage: (state, action: PayloadAction<{ id: string, chatJID: string }>) => {
       const { id, chatJID } = action.payload;
 
+      console.log("ROOMS____---", state.rooms[chatJID].messages)
+
       state.rooms[chatJID].messages.map((message) => {
         if(message.id === id) {
           message.activeMessage = true;

@@ -244,6 +244,7 @@ const ChatRoom: React.FC<ChatRoomProps> = React.memo(
             roomJID={activeRoomJID}
             config={config}
             loading={isLoadingMore}
+            isReply={false}
           />
         )}
         <SendInput
